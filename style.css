@@ -55,9 +55,10 @@
     flex-wrap: wrap;
   }
   
-  .card {
+  .joke {
     margin: 1rem;
     border: 1px solid gray;
+    width: 47%;
   }
   
   @media screen and (min-width: 600px) {

@@ -26,9 +26,9 @@ const removeCurrentJokes = () => {
     var ps = document.querySelectorAll('p')
     ps[0].parentNode.removeChild(ps[0]) 
 
-    var currentCards = document.getElementsByClassName('card');
-    while (currentCards[0]) { 
-      currentCards[0].parentNode.removeChild(currentCards[0]) 
+    var currentJokes = document.getElementsByClassName('joke');
+    while (currentJokes[0]) { 
+      currentJokes[0].parentNode.removeChild(currentJokes[0]) 
     }
 }
 
@@ -40,22 +40,34 @@ const randomizeButton = document.createElement("button")
 randomizeButton.setAttribute('class', 'button')
 randomizeButton.textContent = 'randomize'
 randomizeButton.onclick = () => {
-    randomizeCurrentJokes()
+    var currentJokes = document.getElementsByClassName('joke');
+    shuffleJokes(currentJokes)
 }
 
-const randomizeCurrentJokes = () => {
-    var currentCards = [...document.getElementsByClassName('card')]
-
-    function shuffle(o) {
-      for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x)
-      return o
+const shuffleJokes = (elems) => {
+ 
+    allElems = (function(){
+	var ret = [], l = elems.length;
+	while (l--) { ret[ret.length] = elems[l]; }
+	return ret;
+    })();
+ 
+    var shuffled = (function(){
+        var l = allElems.length, ret = [];
+        while (l--) {
+            var random = Math.floor(Math.random() * allElems.length),
+                randEl = allElems[random].cloneNode(true);
+            allElems.splice(random, 1);
+            ret[ret.length] = randEl;
+        }
+        return ret; 
+    })(), l = elems.length;
+ 
+    while (l--) {
+        elems[l].parentNode.insertBefore(shuffled[l], elems[l].nextSibling);
+        elems[l].parentNode.removeChild(elems[l]);
     }
-
-    newCards = shuffle(currentCards)
-
-    removeCurrentJokes()
-    addToDom(newCards)
-    console.log(newCards)
+ 
 }
 
 const reverseButton = document.createElement("button")
@@ -66,7 +78,7 @@ reverseButton.onclick = () => {
 }
 
 const reverseCurrentJokes = () => {
-    var currentCards = [...document.getElementsByClassName('card')]
+    var currentJokes = [...document.getElementsByClassName('joke')]
 }
 
 const prev = document.createElement('a')
@@ -104,16 +116,16 @@ containerHeader.appendChild(next)
 app.appendChild(container)
 
 const addToDom = jokes => {
-    jokes.forEach(joke => {
-        const card = document.createElement('div')
-        card.setAttribute('class', 'card')
+    jokes.forEach(j => {
+        const joke = document.createElement('div')
+        joke.setAttribute('class', 'joke')
 
         const img = document.createElement('img')
-        img.src = `https://icanhazdadjoke.com/j/${joke.id}.png`
-        img.setAttribute('data-id', joke.id)
+        img.src = `https://icanhazdadjoke.com/j/${j.id}.png`
+        img.setAttribute('data-id', j.id)
 
-        container.appendChild(card)
-        card.appendChild(img)
+        container.appendChild(joke)
+        joke.appendChild(img)
     })
 }
 
@@ -130,7 +142,6 @@ const request = async params => {
         next.setAttribute('data-next', data.next_page)
         if (data.results.length === 0) {
             const noJokes = document.createElement('p')
-            // noJokes.setAttribute('class', 'card')
             noJokes.textContent = `oh no, there are no dad jokes for ${searchInput.value}`
             container.appendChild(noJokes)
         } else {
