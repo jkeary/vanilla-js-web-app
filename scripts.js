@@ -145,7 +145,6 @@ const request = async params => {
     const data = await response.json();
     
     if (response.ok) {
-        console.log(data)
         prev.setAttribute('data-prev', data.previous_page)
         next.setAttribute('data-next', data.next_page)
         if (data.results.length === 0) {
