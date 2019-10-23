@@ -74,11 +74,19 @@ const reverseButton = document.createElement("button")
 reverseButton.setAttribute('class', 'button')
 reverseButton.textContent = 'reverse'
 reverseButton.onclick = () => {
-    reverseCurrentJokes()
+    var parentNode = document.getElementById('container')
+    reverseCurrentJokes(parentNode)
 }
 
-const reverseCurrentJokes = () => {
-    var currentJokes = [...document.getElementsByClassName('joke')]
+const reverseCurrentJokes = (node) => {
+    var parentNode = node.parentNode, nextSibling = node.nextSibling,
+        frag = node.ownerDocument.createDocumentFragment();
+    parentNode.removeChild(node);
+    while(node.lastChild)
+        frag.appendChild(node.lastChild);
+    node.appendChild(frag);
+    parentNode.insertBefore(node, nextSibling);
+    return node;
 }
 
 const prev = document.createElement('a')
@@ -101,7 +109,7 @@ next.onclick = () => {
 
 // Main container of the list of jokes
 const container = document.createElement('div')
-container.setAttribute('class', 'container')
+container.setAttribute('id', 'container')
 
 // Add the nodes to the dom
 app.appendChild(title)
