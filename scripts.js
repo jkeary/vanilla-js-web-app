@@ -23,6 +23,10 @@ searchButton.onclick = () => {
 
 // Removing current list of jokes
 const removeCurrentJokes = () => {
+    var ps = document.querySelectorAll('p')
+    console.log(ps[0])
+    ps[0].parentNode.removeChild(ps[0]) 
+
     var currentCards = document.getElementsByClassName('card');
     while (currentCards[0]) { 
       currentCards[0].parentNode.removeChild(currentCards[0]) 
@@ -68,7 +72,7 @@ const request = async params => {
         console.log(data)
         if (data.results.length === 0) {
             const noJokes = document.createElement('p')
-            noJokes.setAttribute('class', 'card')
+            // noJokes.setAttribute('class', 'card')
             noJokes.textContent = `oh no, there are no dad jokes for ${searchInput.value}`
             container.appendChild(noJokes)
         } else {
