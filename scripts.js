@@ -45,7 +45,26 @@ randomizeButton.onclick = () => {
 }
 
 const randomizeCurrentJokes = () => {
-    var currentCards = document.getElementsByClassName('card');
+    var currentCards = [...document.getElementsByClassName('card')]
+
+    function shuffle(o) {
+      for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x)
+      return o
+    }
+
+    newCards = shuffle(currentCards)
+    console.log(newCards)
+}
+
+const reverseButton = document.createElement("button")
+reverseButton.setAttribute('class', 'button')
+reverseButton.textContent = 'reverse'
+reverseButton.onclick = () => {
+    reverseCurrentJokes()
+}
+
+const reverseCurrentJokes = () => {
+    var currentCards = [...document.getElementsByClassName('card')]
 }
 
 // Main container of the list of jokes
@@ -59,6 +78,7 @@ search.appendChild(searchInput)
 search.appendChild(searchButton)
 app.appendChild(containerHeader)
 containerHeader.appendChild(randomizeButton)
+containerHeader.appendChild(reverseButton)
 app.appendChild(container)
 
 // Main request getting jokes
