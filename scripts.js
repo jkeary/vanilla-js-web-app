@@ -24,7 +24,6 @@ searchButton.onclick = () => {
 // Removing current list of jokes
 const removeCurrentJokes = () => {
     var ps = document.querySelectorAll('p')
-    console.log(ps[0])
     ps[0].parentNode.removeChild(ps[0]) 
 
     var currentCards = document.getElementsByClassName('card');
@@ -39,7 +38,7 @@ containerHeader.setAttribute('class', 'container-header')
 
 const randomizeButton = document.createElement("button")
 randomizeButton.setAttribute('class', 'button')
-randomizeButton.textContent = 'radnomize'
+randomizeButton.textContent = 'randomize'
 randomizeButton.onclick = () => {
     randomizeCurrentJokes()
 }
@@ -53,6 +52,9 @@ const randomizeCurrentJokes = () => {
     }
 
     newCards = shuffle(currentCards)
+
+    removeCurrentJokes()
+    addToDom(newCards)
     console.log(newCards)
 }
 
@@ -101,6 +103,20 @@ containerHeader.appendChild(prev)
 containerHeader.appendChild(next)
 app.appendChild(container)
 
+const addToDom = jokes => {
+    jokes.forEach(joke => {
+        const card = document.createElement('div')
+        card.setAttribute('class', 'card')
+
+        const img = document.createElement('img')
+        img.src = `https://icanhazdadjoke.com/j/${joke.id}.png`
+        img.setAttribute('data-id', joke.id)
+
+        container.appendChild(card)
+        card.appendChild(img)
+    })
+}
+
 // Main request getting jokes
 const request = async params => {
     const response = await fetch(`https://icanhazdadjoke.com/search${params}`, {headers: {
@@ -121,21 +137,7 @@ const request = async params => {
             const jokeNum = document.createElement('p')
             jokeNum.textContent = `there are ${data.total_jokes} jokes total`
             containerHeader.appendChild(jokeNum)
-            data.results.forEach(joke => {
-                const card = document.createElement('div')
-                card.setAttribute('class', 'card')
-    
-                const img = document.createElement('img')
-                img.src = `https://icanhazdadjoke.com/j/${joke.id}.png`
-    
-                const p = document.createElement('p')
-                joke.description = joke.joke.substring(0, 300)
-                p.textContent = `${joke.joke}...`
-    
-                container.appendChild(card)
-                card.appendChild(img)
-                // card.appendChild(p)
-            })
+            addToDom(data.results)
         }
     } else {
         const errorMessage = document.createElement('marquee')
