@@ -91,7 +91,7 @@ container.setAttribute('class', 'container')
 
 // Add the nodes to the dom
 app.appendChild(title)
-app.appendChild(search)
+containerHeader.appendChild(search)
 search.appendChild(searchInput)
 search.appendChild(searchButton)
 app.appendChild(containerHeader)

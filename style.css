@@ -8,11 +8,48 @@
     padding: 15px;
   }
 
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    opacity: 1;
+  }
+
   .search {
     float: right;
-    margin: 8px 15px;
+  }
+
+  .container-header {
+    margin: 15px;
+  }
+
+  a {
+    margin: 5px;
+    cursor: pointer;
   }
   
+  a:hover {
+    opacity: 1;
+  }
+
+  .prev {
+
+  }
+
+  .next {
+
+  }
+
   .container {
     display: flex;
     flex-wrap: wrap;
