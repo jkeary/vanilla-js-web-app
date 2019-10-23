@@ -4,22 +4,24 @@ const title = document.createElement('h1')
 title.setAttribute('class', 'title')
 title.textContent = 'Here are some dad jokes'
 
+// Searching for jokes by term
 const search = document.createElement('div')
 search.setAttribute('class', 'search')
 
-const input = document.createElement("input")
-input.setAttribute('class', 'term')
-input.placeholder = 'filter jokes on terms'
-input.setAttribute("type", "text")
+const searchInput = document.createElement("input")
+searchInput.setAttribute('class', 'term')
+searchInput.placeholder = 'filter jokes on terms'
+searchInput.setAttribute("type", "text")
 
-const button = document.createElement("button")
-button.setAttribute('class', 'button')
-button.textContent = 'search'
-button.onclick = () => {
+const searchButton = document.createElement("button")
+searchButton.setAttribute('class', 'button')
+searchButton.textContent = 'search'
+searchButton.onclick = () => {
     removeCurrentJokes()
-    request(`?term=${input.value}`)
+    request(`?term=${searchInput.value}`)
 }
 
+// Removing current list of jokes
 const removeCurrentJokes = () => {
     var currentCards = document.getElementsByClassName('card');
     while (currentCards[0]) { 
@@ -27,15 +29,35 @@ const removeCurrentJokes = () => {
     }
 }
 
+// Section for data sorting and manipulation
+const containerHeader = document.createElement('div')
+containerHeader.setAttribute('class', 'container-header')
+
+const randomizeButton = document.createElement("button")
+randomizeButton.setAttribute('class', 'button')
+randomizeButton.textContent = 'radnomize'
+randomizeButton.onclick = () => {
+    randomizeCurrentJokes()
+}
+
+const randomizeCurrentJokes = () => {
+    var currentCards = document.getElementsByClassName('card');
+}
+
+// Main container of the list of jokes
 const container = document.createElement('div')
 container.setAttribute('class', 'container')
 
+// Add the nodes to the dom
 app.appendChild(title)
 app.appendChild(search)
-search.appendChild(input)
-search.appendChild(button)
+search.appendChild(searchInput)
+search.appendChild(searchButton)
+app.appendChild(containerHeader)
+containerHeader.appendChild(randomizeButton)
 app.appendChild(container)
 
+// Main request getting jokes
 const request = async params => {
     const response = await fetch(`https://icanhazdadjoke.com/search${params}`, {headers: {
       'Accept': 'application/json',
@@ -47,9 +69,12 @@ const request = async params => {
         if (data.results.length === 0) {
             const noJokes = document.createElement('p')
             noJokes.setAttribute('class', 'card')
-            noJokes.textContent = `oh no, there are no dad jokes for ${input.value}`
+            noJokes.textContent = `oh no, there are no dad jokes for ${searchInput.value}`
             container.appendChild(noJokes)
         } else {
+            const jokeNum = document.createElement('p')
+            jokeNum.textContent = `there are ${data.total_jokes} jokes total`
+            containerHeader.appendChild(jokeNum)
             data.results.forEach(joke => {
                 const card = document.createElement('div')
                 card.setAttribute('class', 'card')
@@ -73,4 +98,5 @@ const request = async params => {
     }
 }
 
+// initialize the page by calling the request function to get all the jokes
 request('');
