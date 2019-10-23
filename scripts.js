@@ -67,6 +67,24 @@ const reverseCurrentJokes = () => {
     var currentCards = [...document.getElementsByClassName('card')]
 }
 
+const prev = document.createElement('a')
+prev.setAttribute('class', 'prev')
+prev.setAttribute('data-prev', 1)
+prev.textContent = "Prev"
+prev.onclick = () => {
+    removeCurrentJokes()
+    request(`?page=${prev.getAttribute('data-prev')}`)
+}
+
+const next = document.createElement('a')
+next.setAttribute('class', 'next')
+next.setAttribute('data-next', 2)
+next.textContent = "Next"
+next.onclick = () => {
+    removeCurrentJokes()
+    request(`?page=${next.getAttribute('data-next')}`)
+}
+
 // Main container of the list of jokes
 const container = document.createElement('div')
 container.setAttribute('class', 'container')
@@ -79,6 +97,8 @@ search.appendChild(searchButton)
 app.appendChild(containerHeader)
 containerHeader.appendChild(randomizeButton)
 containerHeader.appendChild(reverseButton)
+containerHeader.appendChild(prev)
+containerHeader.appendChild(next)
 app.appendChild(container)
 
 // Main request getting jokes
@@ -87,9 +107,11 @@ const request = async params => {
       'Accept': 'application/json',
     }});
     const data = await response.json();
-
+    
     if (response.ok) {
         console.log(data)
+        prev.setAttribute('data-prev', data.previous_page)
+        next.setAttribute('data-next', data.next_page)
         if (data.results.length === 0) {
             const noJokes = document.createElement('p')
             // noJokes.setAttribute('class', 'card')
